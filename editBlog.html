@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Neutrinos Create / Edit Blog</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	</head>
+
+	<body>
+		<div class="header">
+			<h4>Create / Edit post</h4>
+		</div>
+		
+		
+		<div class="row">
+			<div class="editLeftcolumn">
+				<div class="card">
+					<input type="text" id="bTitle" name="blogTitle" value="" placeholder="Title">
+					
+					<br><br>
+					
+					<textarea name = "bContent" id="bContent"></textarea>
+					
+					<br><br>
+					
+					<button class="cancelBtn" type="submit" onClick="window.location='index.html';">Cancel</button>
+					
+					<button class="saveBtn" type="submit" onClick="saveContent()">Save</button>
+					
+					<br><br>
+				</div>
+			</div>
+		</div>
+	
+		<script>
+		
+			var qs = new URLSearchParams(window.location.search);
+			var v1 = qs.get("myVar1");
+			
+			var updateBlog = false;
+			
+			if(v1 != null){				
+				var item = JSON.parse(localStorage.getItem('blogDetails'));
+				var xx = item[v1];	
+				document.getElementById("bTitle").value = xx.bTitle;
+				document.getElementById("bContent").value = xx.bContent;
+				updateBlog = true;
+			}
+			
+			function saveContent() {
+				var users = JSON.parse(localStorage.getItem('blogDetails'));
+				var blogTitle = document.getElementById("bTitle").value;
+				var blogContent = document.getElementById("bContent").value;
+				
+				
+				var user = {
+					bTitle : blogTitle,
+					bContent : blogContent.trim()
+				};
+				
+				if(blogTitle.trim() == ""){
+					alert("Please enter title");
+				}
+				else if(blogContent == ""){
+					alert("Please enter content");
+				}
+				else{
+					if(users === null){
+						var users = [];
+						users.push(user);
+						localStorage.setItem("blogDetails", JSON.stringify(users));
+						window.location.href = "index.html";
+					}
+					else{
+						if(updateBlog == true){
+							console.log("UP :" + v1);
+							users[v1].bTitle = blogTitle
+							users[v1].bContent = blogContent
+							localStorage.setItem("blogDetails", JSON.stringify(users));
+							window.location.href = "index.html";
+						}
+						else{						
+							users.push(user);
+							localStorage.setItem("blogDetails", JSON.stringify(users));
+							window.location.href = "index.html";
+						}
+					}
+				}
+			}
+		</script>
+		
+	</body>
+</html>
